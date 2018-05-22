@@ -8,6 +8,7 @@ class Drawing:
         self.pixel_size = pixel_size
         self.master = Tk()
         self.window = Canvas(self.master, width=self.width * self.pixel_size, height=self.height * self.pixel_size)
+        self.window.bind('<Button-1>', self.onclick)
         for x in range(self.width):
             for y in range(self.height):
                 if (x + y) % 2 == 0:
@@ -27,6 +28,16 @@ class Drawing:
             print(checker.x * self.pixel_size)
             self.window.create_oval(checker.x * self.pixel_size, checker.y * self.pixel_size, (checker.x + 1) * self.pixel_size - 1, (checker.y + 1) * self.pixel_size - 1,
                                              fill=checker.color, width=0)
+
+    def onclick(self, event):
+        item = self.window.find_closest(event.x, event.y)
+        if self.window.type(item) == "oval":
+            print(self.window.itemcget(item, 'width'))
+            if self.window.itemcget(item, 'width') == '0.0':
+                print("a")
+                self.window.itemconfig(item, outline='red', width=3)
+            else:
+                self.window.itemconfig(item, width=0)
 
     def clear_screen(self):
         for x in range(self.width):
